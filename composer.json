@@ -1,0 +1,26 @@
+{
+    "name": "icambridge/phony",
+    "description": "A server to be used to mock HTTP requests",
+    "minimum-stability": "stable",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Iain Cambridge",
+            "email": "iain@iain.sexy"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.3",
+        "ext-apcu": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Phony\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Phony\\Tests\\": "tests/"
+        }
+    }
+}
