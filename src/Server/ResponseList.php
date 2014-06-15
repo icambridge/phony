@@ -2,6 +2,11 @@
 
 namespace Phony\Server;
 
+/**
+ * Class ResponseList
+ * @package Phony\Server
+ * @todo refactor
+ */
 class ResponseList
 {
     /**
