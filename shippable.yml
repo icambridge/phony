@@ -7,7 +7,7 @@ php:
 
 before_script:
   - sudo pecl install apcu
-  - echo "extension=apcu.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+  - sudo echo "extension=apcu.so" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
   - composer install -n
 
 notifications:
