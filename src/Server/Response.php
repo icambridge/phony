@@ -32,7 +32,7 @@ class Response
     /**
      * @param $httpCode
      */
-    public function __construct($httpCode, $contentType = "text/html", $body = "", array $extraHeaders = [])
+    public function __construct($httpCode = 200, $contentType = "text/html", $body = "", array $extraHeaders = [])
     {
         $this->httpCode = $httpCode;
         $this->contentType = $contentType;
