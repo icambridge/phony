@@ -2,6 +2,7 @@
 
 namespace Phony\Server;
 use React\Http\Request;
+use React\Http\Response;
 
 /**
  * Class Router
@@ -10,7 +11,7 @@ use React\Http\Request;
  */
 class Router
 {
-    public function route(Request $request)
+    public function route(Request $request, Response $response)
     {
 
     }
