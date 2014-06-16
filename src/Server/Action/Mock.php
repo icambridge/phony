@@ -3,7 +3,7 @@
 namespace Phony\Server\Action;
 
 use Phony\Server\ResponseBucket;
-use React\Http\Request;
+use React\Http\Request as HttpResponse;
 
 class Mock implements Action
 {
@@ -14,7 +14,7 @@ class Mock implements Action
         $this->responseBucket = $responseBucket;
     }
 
-    public function action(Request $request)
+    public function action(HttpResponse $request)
     {
         return $this->responseBucket->get($request->getMethod(), $request->getPath());
     }
