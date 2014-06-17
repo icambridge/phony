@@ -2,9 +2,9 @@
 
 namespace Phony\Tests\Server\Action;
 
-use Phony\Server\Action\Mock;
+use Phony\Server\Action\Get;
 
-class MockTest extends \PHPUnit_Framework_TestCase
+class GetTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetMock()
     {
@@ -27,7 +27,7 @@ class MockTest extends \PHPUnit_Framework_TestCase
             ->with($this->equalTo($method), $this->equalTo($uri))
             ->will($this->returnValue($response));
 
-        $mock = new Mock($responseBucket);
+        $mock = new Get($responseBucket);
         $actualResponse = $mock->action($request);
         $this->assertSame($response, $actualResponse);
     }

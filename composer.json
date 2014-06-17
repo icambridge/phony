@@ -11,7 +11,8 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "react/http": "v0.3.0"
+        "react/http": "v0.3.0",
+        "react/promise": "*"
     },
     "autoload": {
         "psr-4": {

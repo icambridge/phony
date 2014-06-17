@@ -5,7 +5,7 @@ namespace Phony\Server\Action;
 use Phony\Server\ResponseBucket;
 use React\Http\Request as HttpResponse;
 
-class Mock implements Action
+class Get implements Action
 {
     protected $responseBucket;
 
