@@ -10,6 +10,16 @@ namespace Phony\Server;
 class Response
 {
     /**
+     * @var string
+     */
+    protected $uri;
+
+    /**
+     * @var string
+     */
+    protected $method;
+
+    /**
      * @var int
      */
     protected $httpCode;
@@ -32,8 +42,10 @@ class Response
     /**
      * @param $httpCode
      */
-    public function __construct($httpCode = 200, $contentType = "text/html", $body = "", array $extraHeaders = [])
+    public function __construct($method = "GET", $uri = "/", $httpCode = 200, $contentType = "text/html", $body = "", array $extraHeaders = [])
     {
+        $this->method= $method;
+        $this->uri = $uri;
         $this->httpCode = $httpCode;
         $this->contentType = $contentType;
         $this->body = $body;
@@ -72,5 +84,21 @@ class Response
         $headers = ["Content-Type" => $this->contentType];
         $headers = array_merge($headers, $this->extraHeaders);
         return $headers;
+    }
+
+    /**
+     * @return string
+     */
+    public function getMethod()
+    {
+        return $this->method;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUri()
+    {
+        return $this->uri;
     }
 }

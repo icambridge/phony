@@ -4,11 +4,9 @@ require_once __DIR__ . "/../vendor/autoload.php";
 
 $app = function (\React\Http\Request $request,  \React\Http\Response $response) {
 
-    $request->on("data", function($data) use ($request, $response) {
-            echo $data.PHP_EOL;
-            $response->end("Bye World\n". PHP_EOL);
-        } );
-
+    \React\Stream\BufferedSink::createPromise($request)->then(function ($body) {
+            echo $body.PHP_EOL;
+        });
     $response->writeHead(200, array('Content-Type' => 'text/plain'));
     $response->end("Hello World\n". PHP_EOL);
     print "End".PHP_EOL;
