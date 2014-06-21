@@ -1,8 +1,9 @@
 <?php
 
 namespace Phony\Server;
-use React\Http\Request;
-use React\Http\Response as HttpResponse;
+
+use Icambridge\Http\Request\Request;
+use Icambridge\Http\Response as HttpResponse;
 
 /**
  * Class Router

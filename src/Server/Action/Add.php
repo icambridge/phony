@@ -2,11 +2,31 @@
 
 namespace Phony\Server\Action;
 
-use React\Http\Request;
+use Icambridge\Http\Request\BodiedRequest;
+use Phony\Server\BucketInterface;
+use Phony\Server\Parser\ParserInterface;
 
 class Add implements Action
 {
-    public function action(Request $request)
+    /**
+     * @var \Phony\Server\ResponseBucket
+     */
+    protected $responseBucket;
+
+    /**
+     * @var \Phony\Server\Parser\ParserInterface
+     */
+    protected $parser;
+
+    function __construct(BucketInterface $responseBucket, ParserInterface $parser)
     {
+        $this->parser = $parser;
+        $this->responseBucket = $responseBucket;
+    }
+
+    public function action(BodiedRequest $request)
+    {
+        $response = $this->parser->parse($request->getBody());
+        $this->responseBucket->add($response->getMethod(), $response->getUri(), $response);
     }
 }

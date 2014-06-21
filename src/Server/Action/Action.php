@@ -2,9 +2,9 @@
 
 namespace Phony\Server\Action;
 
-use React\Http\Request;
+use Icambridge\Http\Request\BodiedRequest;
 
 interface Action
 {
-    public function action(Request $request);
+    public function action(BodiedRequest $request);
 }

@@ -1,7 +1,7 @@
 {
     "name": "icambridge/phony",
     "description": "A server to be used to mock HTTP requests",
-    "minimum-stability": "stable",
+    "minimum-stability": "alpha",
     "license": "MIT",
     "authors": [
         {
@@ -11,7 +11,7 @@
     ],
     "require": {
         "php": ">=5.3.3",
-        "react/http": "v0.3.0",
+        "icambridge/http": "dev-master",
         "react/promise": "*"
     },
     "autoload": {
@@ -23,5 +23,11 @@
         "psr-4": {
             "Phony\\Tests\\": "tests/"
         }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url":  "git@github.com:icambridge/react-http.git"
+        }
+    ]
 }

@@ -3,38 +3,48 @@
 namespace Phony\Tests\Server\Action;
 
 use Phony\Server\Action\Add;
+use Phony\Server\Parser\Json;
+use Phony\Server\ResponseBucket;
 
 class AddTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetMock()
     {
-        $this->markTestIncomplete("Need to look at react");
-        $request = $this->getMockBuilder("\\React\\Http\\Request")->disableOriginalConstructor()->getMock();
-        $response = $this->getMock("\\Phony\\Server\\Response");
-        $responseBucket = $this->getMock("\\Phony\\Server\\ResponseBucket");
+        $request = $this->getMockBuilder("\\Icambridge\\Http\\Request\\BodiedRequest")
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $method = "POST";
         $uri = "/test";
-        $body = [
+        $body = "text";
+        $statusCode = 200;
+        $extraHeaders = [];
+        $contentType = "text/html";
+
+        $jsonArray = [
             "method" => $method,
             "uri" => $uri,
-            "body" => "text",
-            "content-type" => "text/html",
-            "status-code" => 200,
-            "extra-headers" => []
+            "body" => $body,
+            "content-type" => $contentType,
+            "http-code" => $statusCode,
+            "extra-headers" => $extraHeaders
         ];
-        $bodyJson = json_encode($body);
+        $bodyJson = json_encode($jsonArray);
 
         $request->expects($this->once())
             ->method("getBody")
             ->will($this->returnValue($bodyJson));
 
-        $responseBucket->expects($this->once())
-            ->method("add")
-            ->with($this->equalTo($method), $this->equalTo($uri), $this->equalTo($response));
+        $responseBucket = new ResponseBucket();
+        $parser = new Json();
 
-
-        $mock = new Add($responseBucket);
+        $mock = new Add($responseBucket, $parser);
         $mock->action($request);
+
+        $response = $responseBucket->get($method, $uri);
+        $this->assertEquals($body, $response->getBody());
+        $this->assertEquals($method, $response->getMethod());
+        $this->assertEquals($uri, $response->getUri());
+        $this->assertEquals($statusCode, $response->getHttpCode());
     }
 }

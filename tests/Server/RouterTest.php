@@ -3,7 +3,7 @@
 namespace Phony\Tests\Server;
 
 use Phony\Server\Router;
-use React\Http\Request;
+use Icambridge\Http\Request\Request;
 
 class RouterTest extends \PHPUnit_Framework_TestCase
 {

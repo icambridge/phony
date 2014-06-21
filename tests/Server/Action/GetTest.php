@@ -8,7 +8,10 @@ class GetTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetMock()
     {
-        $request = $this->getMockBuilder("\\React\\Http\\Request")->disableOriginalConstructor()->getMock();
+        $request = $this->getMockBuilder("\\Icambridge\\Http\\Request\\BodiedRequest")
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $response = $this->getMock("\\Phony\\Server\\Response");
         $responseBucket = $this->getMock("\\Phony\\Server\\ResponseBucket");
 
