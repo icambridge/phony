@@ -32,4 +32,9 @@ class ResponseBucket implements BucketInterface
 
         return $this->responses[$method][$uri];
     }
+
+    public function flush()
+    {
+        $this->responses = [];
+    }
 }
