@@ -17,6 +17,10 @@ class Get implements Action
         $this->responseBucket = $responseBucket;
     }
 
+    /**
+     * @param BodiedRequest $request
+     * @return \Phony\Server\Response
+     */
     public function action(BodiedRequest $request)
     {
         return $this->responseBucket->get($request->getMethod(), $request->getPath());
