@@ -12,7 +12,7 @@
     "require": {
         "php": ">=5.3.3",
         "icambridge/http": "dev-master",
-        "react/promise": "*"
+        "guzzlehttp/guzzle": "~4.0"
     },
     "autoload": {
         "psr-4": {

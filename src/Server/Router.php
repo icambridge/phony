@@ -43,7 +43,10 @@ class Router
 
         $mockedResponse = $this->get->action($request);
         if (!$mockedResponse) {
-            // TODO 404
+            // TODO move to prebuilt class
+            $response->writeHead(404, ["content-type" => "text/html"]);
+            $response->write("Sorry bro, can't find that.");
+            return;
         }
         $response->writeHead($mockedResponse->getHttpCode(), $mockedResponse->getHeaders());
         $response->write($mockedResponse->getBody());
@@ -63,7 +66,7 @@ class Router
 
     public function systemCalls(Request $request, HttpResponse $response)
     {
-        if (preg_match('~/phony/add~isu', $request->getPath())) {
+        if (preg_match('~/phony/add~isu', $request->getPath()) && $request->getMethod() == "POST") {
             $this->add->action($request);
             $this->successResponse($response);
             return;

@@ -69,6 +69,31 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         $this->router->route($nonSystemRequest, $httpResponse);
     }
+    public function testHitsGet404()
+    {
+        $method = "GET";
+        $uri = "/hello-world";
+        $statusCode = 200;
+        $contentType = "text/html";
+        $body = "hello world";
+
+        $response = new Response($method, $uri, $statusCode, $contentType, $body);
+        $this->responseBucket->add($method, $uri, $response);
+        $httpResponse = $this->getMockBuilder("\\Icambridge\\Http\\Response")
+            ->disableOriginalConstructor()
+            ->getMock();
+        $nonSystemRequest = new BodiedRequest("GET", "/bye");
+
+
+        $httpResponse->expects($this->once())
+            ->method("writeHead")
+            ->with($this->equalTo(404), $this->equalTo(["content-type" => "text/html"]));
+        $httpResponse->expects($this->once())
+            ->method("write")
+            ->with($this->equalTo("Sorry bro, can't find that."));
+
+        $this->router->route($nonSystemRequest, $httpResponse);
+    }
 
     public function testHitsFlush()
     {
@@ -122,7 +147,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $httpResponse = $this->getMockBuilder("\\Icambridge\\Http\\Response")
             ->disableOriginalConstructor()
             ->getMock();
-        $nonSystemRequest = new BodiedRequest("GET", "/phony/add", [], '1.1', [], $bodyJson);
+        $nonSystemRequest = new BodiedRequest("POST", "/phony/add", [], '1.1', [], $bodyJson);
 
         $httpResponse->expects($this->once())
             ->method("writeHead")
