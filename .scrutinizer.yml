@@ -8,5 +8,3 @@ tools:
     php_code_sniffer:
       config:
         standard: "PSR2"
-        filter:
-            excluded_paths:       [src/Test/server.php]
