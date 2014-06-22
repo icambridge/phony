@@ -32,4 +32,16 @@ class TestCaseTest extends \PHPUnit_Framework_TestCase
         $response = $client->get("/hello-world");
         $this->assertEquals("HELLO", $response->getBody());
     }
+
+    public function testFlush()
+    {
+        $this->case->createRequest("GET", "/hello-world", "HELLO");
+
+        $client = new Client(["base_url" => $this->endpoint]);
+        $response = $client->get("/hello-world");
+        $this->assertEquals("HELLO", $response->getBody());
+        $this->case->flush();
+        $response = $client->get("/hello-world");
+        $this->assertNotEquals("HELLO", $response->getBody());
+    }
 }

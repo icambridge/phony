@@ -25,6 +25,12 @@ class TestCase extends \PHPUnit_Framework_TestCase
         proc_terminate($this->serverProcess);
     }
 
+    public function flush()
+    {
+        $client = new Client(["base_url" => $this->endpoint]);
+        $client->get("/phony/flush");
+    }
+
     public function createRequest($method, $uri, $body, $statusCode = 200, $contentType = "text/html", $headers = [])
     {
         $jsonArray = [
