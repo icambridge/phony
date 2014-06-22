@@ -37,11 +37,14 @@ class Router
     public function route(Request $request, HttpResponse $response)
     {
         if ($this->isSystemCall($request)) {
-
+            $this->systemCalls($request, $response);
             return;
         }
 
         $mockedResponse = $this->get->action($request);
+        if (!$mockedResponse) {
+            // TODO 404
+        }
         $response->writeHead($mockedResponse->getHttpCode(), $mockedResponse->getHeaders());
         $response->write($mockedResponse->getBody());
     }
@@ -56,5 +59,25 @@ class Router
         $path = $request->getPath();
 
         return (preg_match("~^/phony/~isU", $path) !== 0);
+    }
+
+    public function systemCalls(Request $request, HttpResponse $response)
+    {
+        if (preg_match('~/phony/add~isu', $request->getPath())) {
+            $this->add->action($request);
+            $this->successResponse($response);
+            return;
+        } elseif (preg_match('~/phony/flush~isu', $request->getPath())) {
+            $this->flush->action($request);
+            $this->successResponse($response);
+            return;
+        }
+    }
+
+    protected function successResponse(HttpResponse $response)
+    {
+        $successBody = '{"status": "success"}';
+        $response->writeHead(200, ["content-type" => "application/json"]);
+        $response->write($successBody);
     }
 }

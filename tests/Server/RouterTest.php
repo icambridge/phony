@@ -69,4 +69,72 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         $this->router->route($nonSystemRequest, $httpResponse);
     }
+
+    public function testHitsFlush()
+    {
+        $method = "GET";
+        $uri = "/hello-world";
+        $statusCode = 200;
+        $contentType = "text/html";
+        $body = "hello world";
+
+        $response = new Response($method, $uri, $statusCode, $contentType, $body);
+        $this->responseBucket->add($method, $uri, $response);
+        $httpResponse = $this->getMockBuilder("\\Icambridge\\Http\\Response")
+            ->disableOriginalConstructor()
+            ->getMock();
+        $nonSystemRequest = new BodiedRequest("GET", "/phony/flush");
+
+
+        $body = '{"status": "success"}';
+        $httpResponse->expects($this->once())
+            ->method("writeHead")
+            ->with($this->equalTo($statusCode), $this->equalTo(["content-type" => "application/json"]));
+        $httpResponse->expects($this->once())
+            ->method("write")
+            ->with($this->equalTo($body));
+
+        $this->router->route($nonSystemRequest, $httpResponse);
+
+        $response = $this->responseBucket->get($method,$uri);
+        $this->assertNull($response);
+    }
+
+    public function testSystemAdd()
+    {
+        $method = "GET";
+        $uri = "/hello-world";
+        $statusCode = 200;
+        $contentType = "text/html";
+        $extraHeaders = [];
+        $responseBody = "Hello World";
+        $jsonArray = [
+            "method" => $method,
+            "uri" => $uri,
+            "body" => $responseBody,
+            "content-type" => $contentType,
+            "http-code" => $statusCode,
+            "extra-headers" => $extraHeaders
+        ];
+
+        $bodyJson = json_encode($jsonArray);
+        $body = '{"status": "success"}';
+        $httpResponse = $this->getMockBuilder("\\Icambridge\\Http\\Response")
+            ->disableOriginalConstructor()
+            ->getMock();
+        $nonSystemRequest = new BodiedRequest("GET", "/phony/add", [], '1.1', [], $bodyJson);
+
+        $httpResponse->expects($this->once())
+            ->method("writeHead")
+            ->with($this->equalTo($statusCode), $this->equalTo(["content-type" => "application/json"]));
+        $httpResponse->expects($this->once())
+            ->method("write")
+            ->with($this->equalTo($body));
+
+        $this->router->route($nonSystemRequest, $httpResponse);
+
+        $response = $this->responseBucket->get($method, $uri);
+        $this->assertNotEmpty($response);
+        $this->assertInstanceOf("Phony\\Server\\Response", $response);
+    }
 }
