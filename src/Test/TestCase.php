@@ -22,7 +22,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
     public function stopServer()
     {
-        proc_terminate($this->serverProcess);
+        proc_terminate($this->serverProcess, 9);
     }
 
     public function flush()
