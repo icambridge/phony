@@ -61,7 +61,7 @@ class Response
     }
 
     /**
-     * @return string
+     * @return String
      */
     public function getBody()
     {

@@ -9,7 +9,7 @@ use Phony\Server\Parser\ParserInterface;
 class Add implements Action
 {
     /**
-     * @var \Phony\Server\ResponseBucket
+     * @var \Phony\Server\BucketInterface
      */
     protected $responseBucket;
 
