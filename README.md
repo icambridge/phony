@@ -3,7 +3,7 @@ Phony
 
 A test server to be used in automated tests to mock web services.
 
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/icambridge/phony/badges/quality-score.png?b=master&s=5b76fc3a40bee30d7dc4c24a6203833ea07d96b6)](https://scrutinizer-ci.com/g/icambridge/phony/?branch=master)[![Code Coverage](https://scrutinizer-ci.com/g/icambridge/phony/badges/coverage.png?b=master&s=37eee2ad7b3d0e752872b53ebef055c42ef6f20d)](https://scrutinizer-ci.com/g/icambridge/phony/?branch=master)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/icambridge/phony/badges/quality-score.png?b=master&s=5b76fc3a40bee30d7dc4c24a6203833ea07d96b6)](https://scrutinizer-ci.com/g/icambridge/phony/?branch=master)[![Code Coverage](https://scrutinizer-ci.com/g/icambridge/phony/badges/coverage.png?b=master&s=37eee2ad7b3d0e752872b53ebef055c42ef6f20d)](https://scrutinizer-ci.com/g/icambridge/phony/?branch=master)[![Build Status](https://travis-ci.org/icambridge/phony.svg)](https://travis-ci.org/icambridge/phony)
 
 # FAQ
 
