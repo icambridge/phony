@@ -10,8 +10,8 @@ class ResponseBucket implements BucketInterface
     protected $responses = [];
 
     /**
-     * @param $method
-     * @param $uri
+     * @param string $method
+     * @param string $uri
      * @param Response $response
      */
     public function add($method, $uri, $response)
@@ -20,8 +20,8 @@ class ResponseBucket implements BucketInterface
     }
 
     /**
-     * @param $method
-     * @param $uri
+     * @param string $method
+     * @param string $uri
      * @return Response
      */
     public function get($method, $uri)

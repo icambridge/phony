@@ -27,7 +27,7 @@ class Router
      */
     protected $flush;
 
-    function __construct($add, $flush, $get)
+    public function __construct($add, $flush, $get)
     {
         $this->add = $add;
         $this->flush = $flush;

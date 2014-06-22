@@ -18,7 +18,7 @@ class Add implements Action
      */
     protected $parser;
 
-    function __construct(BucketInterface $responseBucket, ParserInterface $parser)
+    public function __construct(BucketInterface $responseBucket, ParserInterface $parser)
     {
         $this->parser = $parser;
         $this->responseBucket = $responseBucket;

@@ -38,7 +38,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($this->router->isSystemCall($systemRequest));
     }
 
-    public  function testIsSystemCallFalse()
+    public function testIsSystemCallFalse()
     {
         $nonSystemRequest = new BodiedRequest("GET", "/hello-world");
 
@@ -121,7 +121,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
 
         $this->router->route($nonSystemRequest, $httpResponse);
 
-        $response = $this->responseBucket->get($method,$uri);
+        $response = $this->responseBucket->get($method, $uri);
         $this->assertNull($response);
     }
 
