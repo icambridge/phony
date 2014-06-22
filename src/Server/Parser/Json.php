@@ -7,7 +7,7 @@ use Phony\Server\Response;
 class Json implements ParserInterface
 {
     /**
-     * @param $data
+     * @param string $data
      * @return \Phony\Server\Response
      */
     public function parse($data)
