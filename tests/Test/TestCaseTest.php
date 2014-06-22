@@ -35,6 +35,7 @@ class TestCaseTest extends \PHPUnit_Framework_TestCase
 
     public function testFlush()
     {
+        $this->setExpectedException('GuzzleHttp\Exception\ClientException');
         $this->case->createRequest("GET", "/hello-world", "HELLO");
 
         $client = new Client(["base_url" => $this->endpoint]);

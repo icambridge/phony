@@ -2,7 +2,7 @@
 
 namespace Phony\Server;
 
-use Icambridge\Http\Request\Request;
+use Icambridge\Http\Request\BodiedRequest;
 use Icambridge\Http\Response as HttpResponse;
 
 /**
@@ -34,7 +34,7 @@ class Router
         $this->get = $get;
     }
 
-    public function route(Request $request, HttpResponse $response)
+    public function route(BodiedRequest $request, HttpResponse $response)
     {
         if ($this->isSystemCall($request)) {
             $this->systemCalls($request, $response);
@@ -57,14 +57,14 @@ class Router
      * @param Request $request
      * @return bool
      */
-    public function isSystemCall(Request $request)
+    public function isSystemCall(BodiedRequest $request)
     {
         $path = $request->getPath();
 
         return (preg_match("~^/phony/~isU", $path) !== 0);
     }
 
-    public function systemCalls(Request $request, HttpResponse $response)
+    public function systemCalls(BodiedRequest $request, HttpResponse $response)
     {
         if (preg_match('~/phony/add~isu', $request->getPath()) && $request->getMethod() == "POST") {
             $this->add->action($request);

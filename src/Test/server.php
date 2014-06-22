@@ -43,7 +43,6 @@ $requestParser = new Icambridge\Http\Request\Parser($requestFactory, $messagePar
 $http = new Icambridge\Http\Server($socket, $requestParser);
 
 $http->on('request', $app);
-echo "Server running at http://127.0.0.1:1337\n";
 
 $socket->listen(1337);
 $loop->run();
