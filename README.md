@@ -3,6 +3,8 @@ Phony
 
 A test server to be used in automated tests to mock web services.
 
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/icambridge/phony/badges/quality-score.png?b=master&s=5b76fc3a40bee30d7dc4c24a6203833ea07d96b6)](https://scrutinizer-ci.com/g/icambridge/phony/?branch=master)
+
 # FAQ
 
 ### What?
