@@ -20,7 +20,7 @@ It seems some people when originally told about this idea thought it was a very 
 
 ### You're over coupling your tests
 
-Well you would provide the mock http client the return data, this is pretty much the same except their is an actual HTTP server in this mix.
+Well you would provide the mock http client the return data, this is pretty much the same except there is an actual HTTP server in this mix.
 
 ### Mock the client
 
