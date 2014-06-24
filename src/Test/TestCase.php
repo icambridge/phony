@@ -3,26 +3,45 @@
 namespace Phony\Test;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Stream\Stream;
+use Symfony\Component\Process\PhpProcess;
+use Symfony\Component\Process\Process;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
     protected $endpoint = "http://localhost:1337/";
 
+    /**
+     * @var PhpProcess
+     */
     protected $serverProcess;
+
 
     public function startServer()
     {
+
         $fileLocation = __DIR__ . "/server.php";
         $cmd = "php {$fileLocation}";
-        $pipe = [];
-        $this->serverProcess = proc_open($cmd, [0 => ["pipe", "r"]], $pipe);
-        sleep(1);
+        $this->serverProcess = new Process($cmd);
+        $this->serverProcess->start();
+
+        $client = new Client(["base_url" => $this->endpoint]);
+        $isRunning = false;
+        do {
+            try{
+                $client->get("/phony/flush");
+                $isRunning = true;
+            } catch (RequestException $e) {
+                usleep(100);
+            }
+        } while($isRunning == false);
+
     }
 
     public function stopServer()
     {
-        proc_terminate($this->serverProcess, 9);
+        $this->serverProcess->stop();
     }
 
     public function flush()
