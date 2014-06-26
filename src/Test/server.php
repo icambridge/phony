@@ -24,11 +24,11 @@ use Phony\Server\Parser\Json;
 use Phony\Server\Action\Add;
 use Phony\Server\Action\Flush;
 use Phony\Server\Action\Get;
-use Phony\Server\Router;
+use Phony\Server\FrontController;
 
 $responseBucket = new ResponseBucket();
 $json = new Json();
-$router = new Router(new Add($responseBucket, $json), new Flush($responseBucket), new Get($responseBucket));
+$router = new FrontController(new Add($responseBucket, $json), new Flush($responseBucket), new Get($responseBucket));
 
 $app = function (\Icambridge\Http\Request\BodiedRequest $request,  \Icambridge\Http\Response $response) use ($router) {
     $router->route($request, $response);

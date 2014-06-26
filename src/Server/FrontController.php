@@ -6,11 +6,9 @@ use Icambridge\Http\Request\BodiedRequest;
 use Icambridge\Http\Response as HttpResponse;
 
 /**
- * Class Router
- * @package Phony\Server
- * @todo create interface
+ * Class FrontController
  */
-class Router
+class FrontController
 {
     /**
      * @var \Phony\Server\Action\Get

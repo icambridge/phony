@@ -8,13 +8,13 @@ use Phony\Server\Action\Get;
 use Phony\Server\Parser\Json;
 use Phony\Server\Response;
 use Phony\Server\ResponseBucket;
-use Phony\Server\Router;
+use Phony\Server\FrontController;
 use Icambridge\Http\Request\BodiedRequest;
 
 class RouterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var Router
+     * @var FrontController
      */
     protected $router;
 
@@ -27,7 +27,7 @@ class RouterTest extends \PHPUnit_Framework_TestCase
     {
         $responseBucket = new ResponseBucket();
         $json = new Json();
-        $this->router = new Router(new Add($responseBucket, $json), new Flush($responseBucket), new Get($responseBucket));
+        $this->router = new FrontController(new Add($responseBucket, $json), new Flush($responseBucket), new Get($responseBucket));
         $this->responseBucket = $responseBucket;
     }
 
