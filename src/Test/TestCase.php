@@ -5,7 +5,6 @@ namespace Phony\Test;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Stream\Stream;
-use Symfony\Component\Process\PhpProcess;
 use Symfony\Component\Process\Process;
 
 class TestCase extends \PHPUnit_Framework_TestCase
@@ -13,7 +12,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
     protected $endpoint = "http://localhost:1337/";
 
     /**
-     * @var PhpProcess
+     * @var Process
      */
     protected $serverProcess;
 
@@ -30,14 +29,14 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $isRunning = false;
         $tries = 0;
         do {
-            try{
+            try {
                 $client->get("/phony/flush");
                 $isRunning = true;
             } catch (RequestException $e) {
                 usleep(100);
                 $tries++;
             }
-        } while($isRunning == false && $tries <= 100);
+        } while ($isRunning == false && $tries <= 100);
 
     }
 
