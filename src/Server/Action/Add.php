@@ -5,6 +5,7 @@ namespace Phony\Server\Action;
 use Icambridge\Http\Request\BodiedRequest;
 use Phony\Server\BucketInterface;
 use Phony\Server\Parser\ParserInterface;
+use Phony\Server\Response;
 
 class Add implements Action
 {
@@ -28,5 +29,7 @@ class Add implements Action
     {
         $response = $this->parser->parse($request->getBody());
         $this->responseBucket->add($response->getMethod(), $response->getUri(), $response);
+
+        return new Response('GET', '/', 201, 'application/json', '{"status": "success"}');
     }
 }

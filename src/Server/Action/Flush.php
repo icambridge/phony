@@ -4,6 +4,7 @@ namespace Phony\Server\Action;
 
 use Phony\Server\BucketInterface;
 use Icambridge\Http\Request\BodiedRequest;
+use Phony\Server\Response;
 
 class Flush implements Action
 {
@@ -20,5 +21,7 @@ class Flush implements Action
     public function action(BodiedRequest $request)
     {
         $this->responseBucket->flush();
+
+        return new Response('GET', '/', 204, 'application/json', '{"status": "success"}');
     }
 }

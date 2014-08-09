@@ -28,14 +28,16 @@ class TestCase extends \PHPUnit_Framework_TestCase
 
         $client = new Client(["base_url" => $this->endpoint]);
         $isRunning = false;
+        $tries = 0;
         do {
             try{
                 $client->get("/phony/flush");
                 $isRunning = true;
             } catch (RequestException $e) {
                 usleep(100);
+                $tries++;
             }
-        } while($isRunning == false);
+        } while($isRunning == false && $tries <= 100);
 
     }
 

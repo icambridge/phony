@@ -2,83 +2,115 @@
 
 namespace Phony\Server;
 
+use Phony\Server\Action\Action;
+use Phony\Server\Request\ContextBuilderInterface;
+use Phony\Server\Request\UrlMatcherFactory;
 use Icambridge\Http\Request\BodiedRequest;
 use Icambridge\Http\Response as HttpResponse;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\RouteCollection;
 
-/**
- * Class FrontController
- */
 class FrontController
 {
     /**
-     * @var \Phony\Server\Action\Get
+     * @var RouteCollection
      */
-    protected $get;
+    private $routeCollection;
 
     /**
-     * @var \Phony\Server\Action\Add
+     * @var Action
      */
-    protected $add;
+    private $get;
 
-    /**
-     * @var \Phony\Server\Action\Flush
-     */
-    protected $flush;
+    private $urlMatcherFactory;
 
-    public function __construct($add, $flush, $get)
-    {
-        $this->add = $add;
-        $this->flush = $flush;
-        $this->get = $get;
+    private $contextBuilder;
+
+    public function __construct(
+        RouteCollection $routeCollection,
+        Action $getAction,
+        ContextBuilderInterface $contextBuilder,
+        UrlMatcherFactory $urlMatcherFactory
+    ) {
+        $this->routeCollection = $routeCollection;
+        $this->get = $getAction;
+        $this->urlMatcherFactory = $urlMatcherFactory;
+        $this->contextBuilder = $contextBuilder;
     }
 
-    public function route(BodiedRequest $request, HttpResponse $response)
+    public function route(BodiedRequest $bodiedRequest, HttpResponse $httpResponse)
     {
-        if ($this->isSystemCall($request)) {
-            $this->systemCalls($request, $response);
-            return;
+        try {
+            $route = $this->getRoute($bodiedRequest);
+
+            if (!$this->isValidRoute($route)) {
+                return $this->serverBroke($httpResponse);
+            }
+
+            $response = $this->getAction($route)->action($bodiedRequest);
+        } catch (ResourceNotFoundException $exception) {
+            $response = $this->get->action($bodiedRequest);
         }
 
-        $mockedResponse = $this->get->action($request);
-        if (!$mockedResponse) {
-            // TODO move to prebuilt class
-            $response->writeHead(404, ["content-type" => "text/html"]);
-            $response->write("Sorry bro, can't find that.");
-            return;
+        if (!$response) {
+            return $this->notFound($httpResponse);
         }
-        $response->writeHead($mockedResponse->getHttpCode(), $mockedResponse->getHeaders());
-        $response->write($mockedResponse->getBody());
+
+        return $this->returnResponse($httpResponse, $response);
     }
 
+    private function returnResponse(HttpResponse $httpResponse, Response $response)
+    {
+        $httpResponse->writeHead($response->getHttpCode(), $response->getHeaders());
+        $httpResponse->write($response->getBody());
+        return true;
+    }
+
+    private function serverBroke(HttpResponse $response)
+    {
+        $response->writeHead(500, ["content-type" => "text/html"]);
+        $response->write("Sorry bro, monkeys have broken stuff");
+        return false;
+    }
+
+    private function notFound(HttpResponse $response)
+    {
+        $response->writeHead(404, ["content-type" => "text/html"]);
+        $response->write("Sorry bro, can't find that.");
+        return false;
+    }
 
     /**
-     * @param Request $request
+     * @param BodiedRequest $bodiedRequest
+     * @return array
+     */
+    private function getRoute(BodiedRequest $bodiedRequest)
+    {
+        $context = $this->contextBuilder->build($bodiedRequest);
+        $urlMatcher = $this->urlMatcherFactory->build($this->routeCollection, $context);
+        return $urlMatcher->match($bodiedRequest->getPath());
+    }
+
+    /**
+     * @param array $route
      * @return bool
      */
-    public function isSystemCall(BodiedRequest $request)
+    private function isValidRoute(array $route)
     {
-        $path = $request->getPath();
-
-        return (preg_match("~^/phony/~isU", $path) !== 0);
-    }
-
-    public function systemCalls(BodiedRequest $request, HttpResponse $response)
-    {
-        if (preg_match('~/phony/add~isu', $request->getPath()) && $request->getMethod() == "POST") {
-            $this->add->action($request);
-            $this->successResponse($response);
-            return;
-        } elseif (preg_match('~/phony/flush~isu', $request->getPath())) {
-            $this->flush->action($request);
-            $this->successResponse($response);
-            return;
+        if (!isset($route['action']) || !($route['action'] instanceof Action)) {
+            return false;
         }
+
+        return true;
     }
 
-    protected function successResponse(HttpResponse $response)
+    /**
+     * @param array $route
+     *
+     * @return Action
+     */
+    private function getAction(array $route)
     {
-        $successBody = '{"status": "success"}';
-        $response->writeHead(200, ["content-type" => "application/json"]);
-        $response->write($successBody);
+        return $route['action'];
     }
 }

@@ -25,13 +25,26 @@ use Phony\Server\Action\Add;
 use Phony\Server\Action\Flush;
 use Phony\Server\Action\Get;
 use Phony\Server\FrontController;
+use Phony\Server\Request\ContextBuilder;
+use Phony\Server\Request\UrlMatcherFactory;
+use Symfony\Component\Routing\Route;
 
 $responseBucket = new ResponseBucket();
 $json = new Json();
-$router = new FrontController(new Add($responseBucket, $json), new Flush($responseBucket), new Get($responseBucket));
+// Move to seperate class.
+$routeCollection = new \Symfony\Component\Routing\RouteCollection();
+$routeCollection->add('system_flush', new Route('/phony/flush', ['action' => new Flush($responseBucket)]));
+$routeCollection->add('system_add', new Route('/phony/add', ['action' => new Add($responseBucket, $json)]));
 
-$app = function (\Icambridge\Http\Request\BodiedRequest $request,  \Icambridge\Http\Response $response) use ($router) {
-    $router->route($request, $response);
+$frontController = new FrontController(
+    $routeCollection,
+    new Get($responseBucket),
+    new ContextBuilder(),
+    new UrlMatcherFactory()
+);
+
+$app = function (\Icambridge\Http\Request\BodiedRequest $request,  \Icambridge\Http\Response $response) use ($frontController) {
+    $frontController->route($request, $response);
     $response->end();
 };
 
